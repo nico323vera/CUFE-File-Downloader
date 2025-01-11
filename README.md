@@ -2,6 +2,10 @@
 
 This repository provides a system for classifying and processing Colombian Electronic Invoice (CUFE) documents. It consists of two main components:
 
+<div align="center">
+  <img src="images/giu.png" alt="GUI">
+</div>
+
 1. **Backend Script** (`backend.py`): Handles the core functionality, including CUFE extraction, PDF classification based on payment type, and file relocation.
 2. **Graphical User Interface (GUI)** (`gui.py`): A user-friendly interface for selecting files and directories, and triggering the classification process.
 
