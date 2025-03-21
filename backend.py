@@ -60,6 +60,7 @@ def get_payment_type(pdf_path):
 def relocate_and_classify_file(cufe, source_dir, target_dir):
     """
     Classify and relocate a PDF based on its "Forma de pago" field.
+    Also appends CUFE codes to a text file if the payment type is "Crédito".
     """
     try:
         # Define the expected filename
@@ -71,7 +72,7 @@ def relocate_and_classify_file(cufe, source_dir, target_dir):
             # Determine the payment type from the PDF
             payment_type = get_payment_type(source_path)
 
-            # Create subdirectories for "Contado" and "Credito"
+            # Create subdirectories for "Contado" and "Crédito"
             subdir = os.path.join(target_dir, payment_type if payment_type else "Unclassified")
             if not os.path.exists(subdir):
                 os.makedirs(subdir)
@@ -80,10 +81,21 @@ def relocate_and_classify_file(cufe, source_dir, target_dir):
             target_path = os.path.join(subdir, expected_filename)
             shutil.move(source_path, target_path)
             logging.info(f"File moved to: {target_path}")
+
+            # If payment type is "Crédito", append CUFE to credito_cufes.txt
+            if payment_type == "Crédito":
+                credito_txt_path = os.path.join(subdir, "credito_cufes.txt")
+                try:
+                    with open(credito_txt_path, "a", encoding="utf-8") as file:
+                        file.write(cufe + "\n")
+                    logging.info(f"CUFE {cufe} written to {credito_txt_path}")
+                except Exception as e:
+                    logging.error(f"Error writing CUFE {cufe} to credito_cufes.txt: {e}")
         else:
             logging.warning(f"File for CUFE {cufe} not found in {source_dir}.")
     except Exception as e:
         logging.error(f"Error processing file for CUFE {cufe}: {e}")
+
 
 
 def process_cufe_codes(cufe_codes, download_directory, max_retries=3):

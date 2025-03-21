@@ -1,0 +1,17 @@
+# Ignore Python cache directories
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore virtual environments
+venv/
+.venv/
+
+# Ignore environment or secrets files
+.env
+.env.*
+
+# Ignore other OS-specific or editor-specific files
+.DS_Store
+*.swp
